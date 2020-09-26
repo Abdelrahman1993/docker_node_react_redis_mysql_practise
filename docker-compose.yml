@@ -1,0 +1,19 @@
+version: "3"
+services: 
+    postgres:
+        image: postgres:latest
+        env_file: database.env
+    
+    redis:
+        image: redis:latest 
+
+    server:
+        build: 
+            context: ./server
+            dockerfile: Dockerfile.dev
+        volumes: 
+            - /app/node_modules
+            - ./server:/app
+        env_file: database.env
+
+    
