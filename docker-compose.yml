@@ -7,7 +7,7 @@ services:
     redis:
         image: redis:latest 
 
-    server:
+    apiserver:
         build: 
             context: ./server
             dockerfile: Dockerfile.dev
@@ -16,4 +16,20 @@ services:
             - ./server:/app
         env_file: database.env
 
-    
+    worker:
+        build: 
+            context: ./worker
+            dockerfile: Dockerfile.env
+        volumes: 
+            - /app/node_modules
+            - ./server:/app
+        env_file: database.env
+
+    client:
+        build: 
+            context: ./client
+            dockerfile: Dockerfile.env
+        volumes: 
+            - /app/node_modules
+            - ./client:/app
+        env_file: database.env
