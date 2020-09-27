@@ -6,23 +6,37 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
+
+const mysql = require('mysql2');
+
+
 app.use(cors());
 app.use(bodyParser.json());
 
 // Postgres Client Setup
-const { Pool } = require('pg');
-const pgClient = new Pool({
-  user: keys.pgUser,
-  host: keys.pgHost,
-  database: keys.pgDatabase,
-  password: keys.pgPassword,
-  port: keys.pgPort
-});
-pgClient.on('error', () => console.log('Lost PG connection'));
 
-pgClient
-  .query('CREATE TABLE IF NOT EXISTS values (number INT)')
-  .catch(err => console.log(err));
+
+var con = mysql.createConnection({
+  host: "mysql",
+  user: "root",
+  password: "mysql",
+  database: "mysqlDB",
+  insecureAuth : true
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+  var sql = "CREATE TABLE if not exists valuess (number INT(6));";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("Table created");
+  });
+});
+
+
+ //('CREATE TABLE IF NOT EXISTS values (number INT)')
+
 
 // Redis Client Setup
 const redis = require('redis');
@@ -39,10 +53,13 @@ app.get('/', (req, res) => {
   res.send('Hi');
 });
 
-app.get('/values/all', async (req, res) => {
-  const values = await pgClient.query('SELECT * from values');
+app.get('/values/all',  (req, res) => {
+con.query('SELECT * from valuess',function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
 
-  res.send(values.rows);
+ 
 });
 
 app.get('/values/current', async (req, res) => {
@@ -60,7 +77,12 @@ app.post('/values', async (req, res) => {
 
   redisClient.hset('values', index, 'Nothing yet!');
   redisPublisher.publish('insert', index);
-  pgClient.query('INSERT INTO values(number) VALUES($1)', [index]);
+  
+  var sql = `INSERT INTO valuess (number) VALUES (${index})`;
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
 
   res.send({ working: true });
 });

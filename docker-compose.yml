@@ -1,35 +1,65 @@
 version: "3"
 services: 
-    postgres:
-        image: postgres:latest
-        env_file: database.env
-    
+    mysql:
+        image: mysql:latest
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: mysql
+            MYSQL_DATABASE: mysqlDB
+            MYSQL_PASSWORD: mysql
+        
     redis:
         image: redis:latest 
 
     apiserver:
+        restart: always
         build: 
             context: ./server
             dockerfile: Dockerfile.dev
         volumes: 
-            - /app/node_modules
             - ./server:/app
         env_file: database.env
+        depends_on:
+            - redis
+            - mysql
 
     worker:
         build: 
             context: ./worker
-            dockerfile: Dockerfile.env
+            dockerfile: Dockerfile.dev
         volumes: 
             - /app/node_modules
-            - ./server:/app
+            - ./worker:/app
         env_file: database.env
+
+        depends_on:
+            - redis
+            - mysql
 
     client:
         build: 
             context: ./client
-            dockerfile: Dockerfile.env
+            dockerfile: Dockerfile.dev
         volumes: 
             - /app/node_modules
             - ./client:/app
         env_file: database.env
+
+        depends_on:
+            - apiserver
+
+    nginx:
+        build: 
+            context: ./nginx
+            dockerfile: Dockerfile
+        restart: always
+
+        ports: 
+            - 80:80
+
+        depends_on:
+            - apiserver
+            - client
+            - redis
+            - mysql
