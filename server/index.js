@@ -17,11 +17,10 @@ app.use(bodyParser.json());
 
 
 var con = mysql.createConnection({
-  host: "mysql",
-  user: "root",
-  password: "mysql",
-  database: "mysqlDB",
-  insecureAuth : true
+  host: keys.mysqlHost,
+  user: keys.mysqlUser,
+  password: keys.mysqlPassword,
+  database: keys.mysqlDatabase
 });
 
 con.connect(function(err) {
