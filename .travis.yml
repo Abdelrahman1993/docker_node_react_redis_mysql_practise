@@ -24,15 +24,15 @@ after_success:
 
 
 
-# deploy:
-#   provider: elasticbeanstalk
-#   region: 'us-east-2'
-#   app: 'docker-react'
-#   env: 'DockerReact-env'
-#   bucket_name: 'elasticbeanstalk-us-east-2-571580277330'
-#   bucket_path: 'docker-react'
-#   on:
-#     branch: master
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-2'
+  app: 'multipe-docker'
+  env: 'MultipeDocker-env'
+  bucket_name: 'elasticbeanstalk-us-east-2-571580277330'
+  bucket_path: 'multipe-docker'
+  on:
+    branch: master
   
-#   access_key_id: '$AWS_ACCESS_KEY'
-#   secret_access_key: '$AWS_SECRET_KEY'
+  access_key_id: '$AWS_ACCESS_KEY'
+  secret_access_key: '$AWS_SECRET_KEY'

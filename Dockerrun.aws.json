@@ -1,0 +1,30 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions":[
+        {
+            "name":"client",
+            "image": "abdelrahman1993/multi-client",
+            "hostname": "client",
+            "essential":false
+        },
+        {
+            "name":"apiserver",
+            "image": "abdelrahman1993/multi-server",
+            "hostname": "apiserver",
+            "essential":false
+        },
+        {
+            "name":"worker",
+            "image": "abdelrahman1993/multi-worker",
+            "hostname": "worker",
+            "essential":false
+        },
+        {
+            "name":"nginx",
+            "image": "abdelrahman1993/multi-nginx",
+            "hostname": "nginx",
+            "essential":true
+        }
+    ],
+    "links": ["client", "server"]
+}
