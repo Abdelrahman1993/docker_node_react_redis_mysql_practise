@@ -7,7 +7,7 @@
             "hostname": "client",
             "essential":false,
             "memory": 128,
-            "Ports": [
+            "ports": [
                 {
                   "ContainerPort": "3000"
                 }
@@ -19,7 +19,7 @@
             "hostname": "apiserver",
             "essential":false,
             "memory": 128,
-            "Ports": [
+            "ports": [
                 {
                   "ContainerPort": "5000"
                 }
@@ -31,7 +31,7 @@
             "hostname": "worker",
             "essential":false,
             "memory": 128,
-            "Ports": [
+            "ports": [
                 {
                   "ContainerPort": "1234"
                 }
@@ -42,10 +42,10 @@
             "image": "abdelrahman1993/multi-nginx",
             "hostname": "nginx",
             "essential":true,
-            "Ports":[
+            "ports":[
                 {
-                "HostPort": 80,
-                "ContainerPort": 80
+                "HostPort": "80",
+                "ContainerPort": "80"
                 }
             ],
             "links": ["client", "server"],
