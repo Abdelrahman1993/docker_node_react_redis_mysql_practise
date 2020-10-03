@@ -4,10 +4,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t abdelrahman1993/front -f ./client/Dockerfile.dev ./client
+  - docker build -t abdelrahman1993/react-front -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true abdelrahman1993/front npm run test -- --coverage
+  - docker run -e CI=true abdelrahman1993/react-front npm run test -- --coverage
 
 after_success:
     - docker build -t abdelrahman1993/multi-client ./client
